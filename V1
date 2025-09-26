@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIDGELINE - Trail Running Gear</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --charcoal: #2c2825;
+            --sand: #d4a574;
+            --light-sand: #f4e4d4;
+            --brown: #8b6f47;
+            --dark-brown: #5a4a3a;
+            --olive: #6b6b47;
+            --cream: #faf6f0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--cream);
+            color: var(--charcoal);
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            background: linear-gradient(to bottom, rgba(44, 40, 37, 0.95), rgba(44, 40, 37, 0.85));
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            padding: 20px 40px;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--sand);
+            letter-spacing: 3px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--light-sand);
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--sand);
+        }
+
+        /* Page Container */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Home Page */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--dark-brown) 50%, var(--sand) 100%);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .mountain-svg {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 1;
+            color: var(--light-sand);
+        }
+
+        .hero h1 {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: clamp(18px, 2.5vw, 24px);
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 18px 50px;
+            background: var(--sand);
+            color: var(--charcoal);
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .cta-button:hover {
+            background: var(--brown);
+            color: var(--light-sand);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Trail Animation */
+        .trail-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .runner {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--sand);
+            border-radius: 50%;
+            animation: runTrail 10s linear infinite;
+        }
+
+        @keyframes runTrail {
+            0% { left: -20px; bottom: 20%; }
+            100% { left: 100%; bottom: 40%; }
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 40px;
+            background: var(--cream);
+            position: relative;
+            z-index: 1;
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 60px;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 0;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature:hover {
+            border-color: var(--sand);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(139, 111, 71, 0.2);
+            z-index: 2;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: var(--sand);
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+        }
+
+        .mountain-icon {
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor'%3E%3Cpath d='M13 10l-3 5l-4 3l7-13l7 13l-4-3l-3-5z'/%3E%3C/svg%3E");
+        }
+
+        .trail-icon {
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor'%3E%3Cpath d='M3 12h4l3-9l4 18l3-9h4'/%3E%3C/svg%3E");
+        }
+
+        .gear-icon {
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.77 5.82 22 7 14.14l-5-4.87 6.91-1.01L12 2z'/%3E%3C/svg%3E");
+        }
+
+        .feature h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: var(--charcoal);
+        }
+
+        .feature p {
+            color: var(--dark-brown);
+            line-height: 1.6;
+        }
+
+        /* Shop Page */
+        .shop-container {
+            padding: 120px 40px 80px;
+            min-height: 100vh;
+        }
+
+        .product-showcase {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .product-image {
+            position: relative;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--dark-brown) 100%);
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hoodie-visual {
+            width: 80%;
+            height: 80%;
+            background: var(--charcoal);
+            position: relative;
+            border-radius: 10px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .hoodie-design {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 40%;
+            background: linear-gradient(to right, var(--sand), var(--brown));
+            clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%);
+            opacity: 0.8;
+        }
+
+        .product-info {
+            padding: 40px;
+        }
+
+        .product-info h2 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            color: var(--charcoal);
+        }
+
+        .price {
+            font-size: 36px;
+            color: var(--sand);
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .product-description {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--dark-brown);
+            margin-bottom: 30px;
+        }
+
+        .product-features {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .product-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(139, 111, 71, 0.2);
+            color: var(--charcoal);
+        }
+
+        .product-features li:before {
+            content: "→ ";
+            color: var(--sand);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .size-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .size-option {
+            width: 50px;
+            height: 50px;
+            border: 2px solid var(--sand);
+            background: transparent;
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .size-option:hover, .size-option.selected {
+            background: var(--sand);
+            color: white;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 20px;
+            background: var(--charcoal);
+            color: var(--light-sand);
+            border: none;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .add-to-cart:hover {
+            background: var(--dark-brown);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* Resources Page */
+        .resources-container {
+            padding: 120px 40px 80px;
+            min-height: 100vh;
+        }
+
+        .resources-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .resources-header h2 {
+            font-size: 48px;
+            color: var(--charcoal);
+            margin-bottom: 20px;
+        }
+
+        .resources-header p {
+            font-size: 20px;
+            color: var(--dark-brown);
+        }
+
+        .resources-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 60px;
+        }
+
+        .blog-section h3, .video-section h3 {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: var(--charcoal);
+            border-bottom: 3px solid var(--sand);
+            padding-bottom: 15px;
+        }
+
+        .blog-post {
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-left: 4px solid var(--sand);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .blog-post:hover {
+            transform: translateX(10px);
+            box-shadow: -10px 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .blog-post h4 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--charcoal);
+        }
+
+        .blog-meta {
+            font-size: 14px;
+            color: var(--brown);
+            margin-bottom: 15px;
+        }
+
+        .blog-excerpt {
+            color: var(--dark-brown);
+            line-height: 1.6;
+        }
+
+        .video-card {
+            background: white;
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, var(--sand), var(--brown));
+            position: relative;
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid white;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--charcoal);
+            margin-bottom: 5px;
+        }
+
+        .video-channel {
+            font-size: 14px;
+            color: var(--brown);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .product-showcase,
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            nav {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">RIDGELINE</div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link active" data-page="home">HOME</a>
+                <a href="#shop" class="nav-link" data-page="shop">SHOP</a>
+                <a href="#resources" class="nav-link" data-page="resources">RESOURCES</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <section class="hero">
+            <svg class="mountain-svg" viewBox="0 0 1440 600" fill="none">
+                <path d="M0 600L360 300L720 450L1080 200L1440 400V600H0Z" fill="currentColor" opacity="0.3"/>
+                <path d="M0 600L240 400L480 350L720 500L960 300L1200 450L1440 350V600H0Z" fill="currentColor" opacity="0.2"/>
+            </svg>
+            <div class="trail-animation">
+                <div class="runner"></div>
+            </div>
+            <div class="hero-content">
+                <h1>CONQUER THE TRAIL</h1>
+                <p>Gear built for those who chase horizons</p>
+                <a href="#shop" class="cta-button nav-link" data-page="shop">EXPLORE GEAR</a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon mountain-icon"></div>
+                    <h3>Mountain Tested</h3>
+                    <p>Every piece of gear is tested on the most demanding trails. From alpine scrambles to desert ultramarathons, our products earn their place in your pack.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon trail-icon"></div>
+                    <h3>Trail Engineering</h3>
+                    <p>Engineered with advanced moisture-wicking fabrics and strategic ventilation zones. Built for the relentless forward motion of trail running.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon gear-icon"></div>
+                    <h3>Sustainable Performance</h3>
+                    <p>Premium recycled materials meet uncompromising performance standards. Leave nothing but footprints on the trails you love.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Shop Page -->
+    <div id="shop" class="page">
+        <div class="shop-container">
+            <div class="product-showcase">
+                <div class="product-image">
+                    <div class="hoodie-visual">
+                        <div class="hoodie-design"></div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h2>RIDGELINE TRAIL HOODIE</h2>
+                    <div class="price">$60</div>
+                    <p class="product-description">
+                        The ultimate trail companion. Our signature hoodie combines rugged durability with 
+                        moisture-wicking performance. Designed for pre-dawn starts and summit celebrations.
+                    </p>
+                    <ul class="product-features">
+                        <li>4-way stretch technical fabric</li>
+                        <li>UPF 50+ sun protection</li>
+                        <li>Moisture-wicking & quick-dry</li>
+                        <li>Thumbhole cuffs for coverage</li>
+                        <li>Hidden phone pocket with cord port</li>
+                        <li>Reflective trail markers for visibility</li>
+                    </ul>
+                    <div class="size-selector">
+                        <button class="size-option">XS</button>
+                        <button class="size-option">S</button>
+                        <button class="size-option selected">M</button>
+                        <button class="size-option">L</button>
+                        <button class="size-option">XL</button>
+                        <button class="size-option">XXL</button>
+                    </div>
+                    <button class="add-to-cart">ADD TO CART</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources Page -->
+    <div id="resources" class="page">
+        <div class="resources-container">
+            <div class="resources-header">
+                <h2>TRAIL KNOWLEDGE</h2>
+                <p>Fuel your passion with expert insights and inspiring stories from the trail</p>
+            </div>
+            <div class="resources-grid">
+                <div class="blog-section">
+                    <h3>Latest Trail Wisdom</h3>
+                    <article class="blog-post">
+                        <h4>Mastering Technical Descents: A Guide to Downhill Confidence</h4>
+                        <div class="blog-meta">October 15, 2024 | 8 min read</div>
+                        <p class="blog-excerpt">Learn the biomechanics and mental strategies that transform sketchy descents into flowing dance with gravity. From foot placement to breathing techniques...</p>
+                    </article>
+                    <article class="blog-post">
+                        <h4>Fueling Your First Ultra: Nutrition Strategies That Work</h4>
+                        <div class="blog-meta">October 8, 2024 | 12 min read</div>
+                        <p class="blog-excerpt">Discover the science behind endurance fueling and practical strategies for maintaining energy through 50K, 50-mile, and 100-mile efforts...</p>
+                    </article>
+                    <article class="blog-post">
+                        <h4>Trail Running in Winter: Gear, Safety, and Mindset</h4>
+                        <div class="blog-meta">September 28, 2024 | 6 min read</div>
+                        <p class="blog-excerpt">Embrace the solitude and beauty of winter trails with proper preparation. From microspikes to layering systems, here's your complete guide...</p>
+                    </article>
+                    <article class="blog-post">
+                        <h4>Building Mental Resilience: Lessons from 100-Mile Finishers</h4>
+                        <div class="blog-meta">September 20, 2024 | 10 min read</div>
+                        <p class="blog-excerpt">Elite ultra runners share their mental frameworks for pushing through the darkest moments when everything hurts and quitting seems logical...</p>
+                    </article>
+                </div>
+                <div class="video-section">
+                    <h3>Trail Videos</h3>
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">UTMB 2024: The Ultimate Test</div>
+                            <div class="video-channel">Trail Running Channel</div>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Courtney Dauwalter: Pain Cave Masterclass</div>
+                            <div class="video-channel">Ultra Running Magazine</div>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Western States 100: A Journey</div>
+                            <div class="video-channel">Mountain Outpost</div>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <div class="video-thumbnail">
+                            <div class="play-icon"></div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">Trail Running Form Analysis</div>
+                            <div class="video-channel">The Running Clinic</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Page navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = link.dataset.page;
+                
+                // Update active states
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                // Switch pages
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
+                
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Size selector
+        const sizeOptions = document.querySelectorAll('.size-option');
+        sizeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                sizeOptions.forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        // Add to cart animation
+        const addToCart = document.querySelector('.add-to-cart');
+        addToCart?.addEventListener('click', () => {
+            const originalText = addToCart.textContent;
+            addToCart.textContent = 'ADDED TO CART ✓';
+            addToCart.style.background = 'var(--sand)';
+            
+            setTimeout(() => {
+                addToCart.textContent = originalText;
+                addToCart.style.background = '';
+            }, 2000);
+        });
+
+        // Interactive hover effect for features (removed to prevent conflicts)
+
+        // Blog and video click handlers
+        const blogPosts = document.querySelectorAll('.blog-post');
+        blogPosts.forEach(post => {
+            post.addEventListener('click', () => {
+                // In production, this would navigate to the blog post
+                console.log('Navigate to blog post');
+            });
+        });
+
+        const videoCards = document.querySelectorAll('.video-card');
+        videoCards.forEach(card => {
+            card.addEventListener('click', () => {
+                // In production, this would open the YouTube video
+                window.open('https://www.youtube.com/results?search_query=ultra+running', '_blank');
+            });
+        });
+
+        // Parallax scroll effect for hero
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+    </script>
+</body>
+</html>
